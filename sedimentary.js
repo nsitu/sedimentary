@@ -6,9 +6,14 @@
 // x.play(1.5); // ; play first 1.5 seconds of sound
 // x.play(1.5,0.5); // ; play for 1.5 seconds, down an octave (rate=0.5)
 // x.play(1.5,0.5,0.2); // ; play for 1.5secs,down an octave, start 0.2 secs into sample
-playRed = false;
-playBlue = false;
-playGold = false;
+
+var rand = Math.random() * 1000+500,
+    randother = Math.random() * 1000+500,
+    randanother = Math.random() * 1000+500,
+    bankSize = 10,
+    playRed = false,
+    playBlue = false,
+    playGold = false;
 
 SimpleMonoSample = function(url) {
   this.url = url;
@@ -58,9 +63,6 @@ SimpleMonoSample.prototype.play = function (amp,dur,rate,startPos) {
   } else console.log("warning: attempt to play synth that was already playing");
 }
 
-var rand = Math.random() * 1000+500,
-     randother = Math.random() * 1000+500,
-     randanother = Math.random() * 1000+500;
 
 function apertInitialize() {
   // $('body').css({ 'width' : '100%', 'height' : '100%', 'background': 'url(ajax-loader.gif) no-repeat 50% 50%' } );
@@ -102,11 +104,17 @@ function apertInitialize() {
 
   setInterval(function() { jigglePills(); }, 60 );
 
-  simpleMonoSampleBank = new Array(10);
-  for(var n=0;n<10;n++) {
-    console.log("created synth " + n)
-    // simpleMonoSampleBank[n] = new SimpleMonoSample("uhoh-mono-16bit.wav");
-    simpleMonoSampleBank[n] = new SimpleMonoSample("RockScrape11.wav");
+  theSamples = {
+    redBank : new Array(bankSize),
+    blueBank : new Array(bankSize),
+    goldBank : new Array(bankSize)
+  }
+
+  for(var n=0;n<bankSize;n++) {
+    console.log("created synth " + n);
+    theSamples.redBank[n] = new SimpleMonoSample("RockScrape11.wav"); // you could easily add more sounds to this bank.
+    theSamples.blueBank[n] = new SimpleMonoSample("RockScrape10.wav");
+    theSamples.goldBank[n] = new SimpleMonoSample("Whistle1.wav");
   }
 }
 
@@ -127,18 +135,30 @@ function jigglePills(){
   $('#theGoldPill').css('transform', 'rotate(' + ( Math.sin( (	new Date().getTime()+randother ) / 2000  	) * 5 )  + 'deg)');
 }
 
-function playSimpleMonoSample(amp,dur,rate,startPos) {
-  if (!playRed) return;
-  redPulse();
-  var n;
-  for(n=0;n<10;n++) {
-    if(simpleMonoSampleBank[n].playing==false)break;
-  }
-  if(n<10) {
-    simpleMonoSampleBank[n].play(amp,dur,rate,startPos);
-  }
-  else console.log("warning: all synth instances already plaing");
+function redSound(amp,dur,rate,startPos) {
+
+  if (!playRed) return;  redPulse();  var n;
+  for(n=0;n<bankSize;n++) {  if( theSamples.redBank[n].playing==false ) break; }
+  if(n<bankSize) {   theSamples.redBank[n].play(amp,dur,rate,startPos);  }
+  else console.log("warning: all red synth instances already playing");
 }
+
+
+function blueSound(amp,dur,rate,startPos) {
+  if (!playBlue) return;  bluePulse();  var n;
+  for(n=0;n<bankSize;n++) {  if( theSamples.blueBank[n].playing==false ) break; }
+  if(n<bankSize) {   theSamples.blueBank[n].play(amp,dur,rate,startPos);  }
+  else console.log("warning: all blue synth instances already playing");
+}
+
+
+function goldSound(amp,dur,rate,startPos) {
+  if (!playGold) return;  goldPulse();  var n;
+  for(n=0;n<bankSize;n++) {  if( theSamples.goldBank[n].playing==false ) break; }
+  if(n<bankSize) {   theSamples.goldBank[n].play(amp,dur,rate,startPos);  }
+  else console.log("warning: all red synth instances already playing");
+}
+
 
 function simpleSaw(freq,amp) {
 if (!playGold) return;
