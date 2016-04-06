@@ -245,6 +245,7 @@ window.addEventListener('touchend', function() {
 	source.buffer = buffer;
 	source.connect(ac.destination);
 	source.noteOn(0);
+  alert('appleclick');
 }, false);
 
 
