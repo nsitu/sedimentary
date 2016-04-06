@@ -239,7 +239,7 @@ function generativeSaw(freq,amp) {
 	},1000);
 };
 
-window.addEventListener('touchstart', function() {
+window.addEventListener('touchend', function() {
 	var buffer = ac.createBuffer(1, 1, 22050);
 	var source = ac.createBufferSource();
 	source.buffer = buffer;
