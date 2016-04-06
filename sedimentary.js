@@ -7,6 +7,7 @@
 // x.play(1.5,0.5); // ; play for 1.5 seconds, down an octave (rate=0.5)
 // x.play(1.5,0.5,0.2); // ; play for 1.5secs,down an octave, start 0.2 secs into sample
 
+$( document ).ready(function() {
 
     $('<div/>', { id: 'theGoldPill' }).appendTo('body').css({
         'width' : '50%', 'height' : '20%',
@@ -49,6 +50,7 @@
   setInterval(function() { jigglePills(); }, 60 );
 
 
+  });
 
 
 var rand = Math.random() * 1000+500,
