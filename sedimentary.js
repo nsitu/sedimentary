@@ -8,6 +8,47 @@
 // x.play(1.5,0.5,0.2); // ; play for 1.5secs,down an octave, start 0.2 secs into sample
 
 
+    $('<div/>', { id: 'theGoldPill' }).appendTo('body').css({
+        'width' : '50%', 'height' : '20%',
+        'position' : 'absolute', 'top': '10%', 'left' : '25%',
+        'background-color': 'rgba(170, 240, 38,0.5)',
+        'border-radius' : '100px'
+      }).click(function(){
+        baseOnLoad();
+        playGold = true; playBlue = false; playRed = false;
+          $('#theRedPill').css({'border': 'none'});
+          $('#theBluePill').css({'border': 'none'});
+          $('#theGoldPill').css({'border': '10px solid rgba(134, 120, 15, 1)'});
+      });
+
+  $('<div/>', { id: 'theBluePill' }).appendTo('body').css({
+      'width' : '50%', 'height' : '20%',
+      'position' : 'absolute', 'top': '40%', 'left' : '25%',
+      'background-color': 'rgba(38,38,170,0.5)',
+      'border-radius' : '100px'
+    }).click(function(){
+        baseOnLoad();
+      playBlue = true; playRed = false; playGold = false;
+        $('#theRedPill').css({'border': 'none'});
+        $('#theGoldPill').css({'border': 'none'});
+        $('#theBluePill').css({'border': '10px solid rgba(15, 40, 80, 1)'});
+    });
+    $('<div/>', { id: 'theRedPill' }).appendTo('body').css({
+        'width' : '50%', 'height' : '20%',
+        'position' : 'absolute', 'top': '70%', 'left' : '25%',
+        'background-color': 'rgba(170,38,38,0.5)',
+        'border-radius' : '100px'
+      }).click(function(){
+          baseOnLoad();
+          playRed = true; playBlue = false; playGold=false;
+          $('#theRedPill').css({'border': '10px solid rgba(80,15,15,1)'});
+          $('#theBluePill').css({'border': 'none'});
+          $('#theGoldPill').css({'border': 'none'});
+      });
+
+  setInterval(function() { jigglePills(); }, 60 );
+
+
 
 
 var rand = Math.random() * 1000+500,
@@ -68,44 +109,10 @@ SimpleMonoSample.prototype.play = function (amp,dur,rate,startPos) {
 
 
 function apertInitialize() {
+// the purpose of this is for synths to be created after the audio context exists
   // $('body').css({ 'width' : '100%', 'height' : '100%', 'background': 'url(ajax-loader.gif) no-repeat 50% 50%' } );
 
 
-    $('<div/>', { id: 'theGoldPill' }).appendTo('body').css({
-        'width' : '50%', 'height' : '20%',
-        'position' : 'absolute', 'top': '10%', 'left' : '25%',
-        'background-color': 'rgba(170, 240, 38,0.5)',
-        'border-radius' : '100px'
-      }).click(function(){
-        playGold = true; playBlue = false; playRed = false;
-          $('#theRedPill').css({'border': 'none'});
-          $('#theBluePill').css({'border': 'none'});
-          $('#theGoldPill').css({'border': '10px solid rgba(134, 120, 15, 1)'});
-      });
-  $('<div/>', { id: 'theBluePill' }).appendTo('body').css({
-      'width' : '50%', 'height' : '20%',
-      'position' : 'absolute', 'top': '40%', 'left' : '25%',
-      'background-color': 'rgba(38,38,170,0.5)',
-      'border-radius' : '100px'
-    }).click(function(){
-      playBlue = true; playRed = false; playGold = false;
-        $('#theRedPill').css({'border': 'none'});
-        $('#theGoldPill').css({'border': 'none'});
-        $('#theBluePill').css({'border': '10px solid rgba(15, 40, 80, 1)'});
-    });
-    $('<div/>', { id: 'theRedPill' }).appendTo('body').css({
-        'width' : '50%', 'height' : '20%',
-        'position' : 'absolute', 'top': '70%', 'left' : '25%',
-        'background-color': 'rgba(170,38,38,0.5)',
-        'border-radius' : '100px'
-      }).click(function(){
-          playRed = true; playBlue = false; playGold=false;
-          $('#theRedPill').css({'border': '10px solid rgba(80,15,15,1)'});
-          $('#theBluePill').css({'border': 'none'});
-          $('#theGoldPill').css({'border': 'none'});
-      });
-
-  setInterval(function() { jigglePills(); }, 60 );
 
   theSamples = {
     collideBank : new Array(bankSize),
@@ -189,7 +196,6 @@ function goldSound(amp,dur,rate,startPos) {
 
 
 function simpleSaw(freq,amp) {
-if (!playGold) return;
 
   var temp = [261.626,311.127,349.228,369.994,391.995,466.164];
   var multipliers = [0.5,1,2];
@@ -215,8 +221,7 @@ if (!playGold) return;
 };
 
 function generativeSaw(freq,amp) {
-  if (!playBlue) return;
-  bluePulse();
+
   var temp = [261.626,311.127,349.228,369.994,391.995,466.164];
   var freq = temp[Math.floor(Math.random()*temp.length)];
 	var sine = ac.createOscillator();
@@ -239,18 +244,7 @@ function generativeSaw(freq,amp) {
 	},1000);
 };
 
-window.addEventListener('touchend', function() {
-  ac = new webkitAudioContext();
-
-	var buffer = ac.createBuffer(1, 1, 22050);
-	var source = ac.createBufferSource();
-	source.buffer = buffer;
-	source.connect(ac.destination);
-	source.noteOn(0);
-  alert('appleclick');
-  simpleSaw(440,1.0);
-
-}, false);
+// window.addEventListener('touchend', function() {  baseOnLoad();  }, false);
 
 
 /*! jQuery Color v@2.1.2 http://github.com/jquery/jquery-color | jquery.org/license */
