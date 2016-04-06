@@ -240,12 +240,16 @@ function generativeSaw(freq,amp) {
 };
 
 window.addEventListener('touchend', function() {
+  ac = new webkitAudioContext();
+
 	var buffer = ac.createBuffer(1, 1, 22050);
 	var source = ac.createBufferSource();
 	source.buffer = buffer;
 	source.connect(ac.destination);
 	source.noteOn(0);
   alert('appleclick');
+  simpleSaw(440,1.0);
+
 }, false);
 
 
