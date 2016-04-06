@@ -7,10 +7,13 @@
 // x.play(1.5,0.5); // ; play for 1.5 seconds, down an octave (rate=0.5)
 // x.play(1.5,0.5,0.2); // ; play for 1.5secs,down an octave, start 0.2 secs into sample
 
+
+
+
 var rand = Math.random() * 1000+500,
     randother = Math.random() * 1000+500,
     randanother = Math.random() * 1000+500,
-    bankSize = 10,
+    bankSize = 20,
     playRed = false,
     playBlue = false,
     playGold = false;
@@ -77,7 +80,7 @@ function apertInitialize() {
         playGold = true; playBlue = false; playRed = false;
           $('#theRedPill').css({'border': 'none'});
           $('#theBluePill').css({'border': 'none'});
-          $('#theGoldPill').css({'border': '5px solid rgba(170, 240, 38, 1)'});
+          $('#theGoldPill').css({'border': '10px solid rgba(134, 120, 15, 1)'});
       });
   $('<div/>', { id: 'theBluePill' }).appendTo('body').css({
       'width' : '50%', 'height' : '20%',
@@ -88,7 +91,7 @@ function apertInitialize() {
       playBlue = true; playRed = false; playGold = false;
         $('#theRedPill').css({'border': 'none'});
         $('#theGoldPill').css({'border': 'none'});
-        $('#theBluePill').css({'border': '5px solid rgba(38, 38, 170, 1)'});
+        $('#theBluePill').css({'border': '10px solid rgba(15, 40, 80, 1)'});
     });
     $('<div/>', { id: 'theRedPill' }).appendTo('body').css({
         'width' : '50%', 'height' : '20%',
@@ -97,7 +100,7 @@ function apertInitialize() {
         'border-radius' : '100px'
       }).click(function(){
           playRed = true; playBlue = false; playGold=false;
-          $('#theRedPill').css({'border': '5px solid rgba(170,38,38,1)'});
+          $('#theRedPill').css({'border': '10px solid rgba(80,15,15,1)'});
           $('#theBluePill').css({'border': 'none'});
           $('#theGoldPill').css({'border': 'none'});
       });
@@ -105,6 +108,7 @@ function apertInitialize() {
   setInterval(function() { jigglePills(); }, 60 );
 
   theSamples = {
+    collideBank : new Array(bankSize),
     redBank : new Array(bankSize),
     blueBank : new Array(bankSize),
     goldBank : new Array(bankSize)
@@ -112,9 +116,24 @@ function apertInitialize() {
 
   for(var n=0;n<bankSize;n++) {
     console.log("created synth " + n);
-    theSamples.redBank[n] = new SimpleMonoSample("RockScrape11.wav"); // you could easily add more sounds to this bank.
-    theSamples.blueBank[n] = new SimpleMonoSample("RockScrape10.wav");
-    theSamples.goldBank[n] = new SimpleMonoSample("Whistle1.wav");
+    // RockScrape4 short rough scrape
+    // RockScrape10 long quiet scrape
+    // RockScrape11 clink clink
+    // RockScrape20 louder scrape
+
+    var collideTracks = ["PrimeOrdeal1.wav"];
+    var redTracks = ["RockScrape11.wav", "RockScrape19.wav"];
+    var blueTracks = ["RockScrape20.wav"];
+    var goldTracks = ["Whistle1.wav","Whistle12.wav","Whistle13.wav"]
+    var collideFile = collideTracks[Math.floor(Math.random()*collideTracks.length)];
+    var redFile = redTracks[Math.floor(Math.random()*redTracks.length)];
+    var blueFile = blueTracks[Math.floor(Math.random()*blueTracks.length)];
+    var goldFile = goldTracks[Math.floor(Math.random()*goldTracks.length)];
+
+    theSamples.collideBank[n] = new SimpleMonoSample(collideFile);
+    theSamples.redBank[n] = new SimpleMonoSample(redFile);
+    theSamples.blueBank[n] = new SimpleMonoSample(blueFile);
+    theSamples.goldBank[n] = new SimpleMonoSample(goldFile);
   }
 }
 
@@ -133,6 +152,15 @@ function jigglePills(){
   $('#theRedPill').css('transform', 'rotate(' + ( Math.sin(	( new Date().getTime()+rand) / 2000  	) * 5 )  + 'deg)');
   $('#theBluePill').css('transform', 'rotate(' + ( Math.sin(	(new Date().getTime()-randanother) / 2000  	) * 5 )  + 'deg)');
   $('#theGoldPill').css('transform', 'rotate(' + ( Math.sin( (	new Date().getTime()+randother ) / 2000  	) * 5 )  + 'deg)');
+}
+
+
+function collideSound(amp,dur,rate,startPos) {
+  //redPulse();
+  var n;
+  for(n=0;n<bankSize;n++) {  if( theSamples.collideBank[n].playing==false ) break; }
+  if(n<bankSize) {   theSamples.collideBank[n].play(amp,dur,rate,startPos);  }
+  else console.log("warning: all collide synth instances already playing");
 }
 
 function redSound(amp,dur,rate,startPos) {
