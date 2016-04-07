@@ -1,0 +1,22 @@
+saturate();
+redShift();
+theBlues();
+goldenAge();
+hover();
+rockOn();
+rockOff();
+oneEighty();
+theColourDrainedFromHerFace();
+reset();
+collide();
+happyTrails();
+sadTrails();
+blueSpeed();
+redSpeed();
+goldSpeed();
+bluePower();
+redPower();
+goldPower();
+breakOut();
+getBackInLine();
+kenneth(); // set global pulses per second.
