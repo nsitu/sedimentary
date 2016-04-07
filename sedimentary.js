@@ -16,6 +16,7 @@ $( document ).ready(function() {
         'border-radius' : '100px'
       }).click(function(){
         baseOnLoad();
+        simple(440,1);
         playGold = true; playBlue = false; playRed = false;
           $('#theRedPill').css({'border': 'none'});
           $('#theBluePill').css({'border': 'none'});
@@ -29,6 +30,7 @@ $( document ).ready(function() {
       'border-radius' : '100px'
     }).click(function(){
         baseOnLoad();
+        simple(440,1);
       playBlue = true; playRed = false; playGold = false;
         $('#theRedPill').css({'border': 'none'});
         $('#theGoldPill').css({'border': 'none'});
@@ -41,6 +43,7 @@ $( document ).ready(function() {
         'border-radius' : '100px'
       }).click(function(){
           baseOnLoad();
+          simple(440,1);
           playRed = true; playBlue = false; playGold=false;
           $('#theRedPill').css({'border': '10px solid rgba(80,15,15,1)'});
           $('#theBluePill').css({'border': 'none'});
